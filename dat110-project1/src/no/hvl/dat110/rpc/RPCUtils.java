@@ -2,6 +2,9 @@ package no.hvl.dat110.rpc;
 
 import java.util.Arrays;
 
+
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 import no.hvl.dat110.TODO;
 
 public class RPCUtils {
@@ -13,13 +16,17 @@ public class RPCUtils {
 	
 	public static byte[] marshallString(byte rpcid, String str) {
 
-		byte[] encoded;
+		byte[] strByte = str.getBytes();
 
-		// TODO: marshall RPC identifier and string into byte array
+		byte[] encoded = new byte[strByte.length+1];
 
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
+		encoded[0] = rpcid;
+
+
+		for (int i = 0; i < strByte.length; i++) {
+			encoded[i+1] = strByte[i];
 		}
+		// TODO: marshall RPC identifier and string into byte array
 
 		return encoded;
 	}
@@ -29,23 +36,20 @@ public class RPCUtils {
 		String decoded;
 
 		// TODO: unmarshall String contained in data into decoded
-
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
-		}
+		
+		decoded = new String(data, 1, data.length-1);
 
 		return decoded;
 	}
 
 	public static byte[] marshallVoid(byte rpcid) {
 
-		byte[] encoded;
+		
 
 		// TODO: marshall RPC identifier in case of void type
 
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
-		}
+		byte[] encoded = new byte[1];
+		encoded[0] = rpcid;
 
 		return encoded;
 
@@ -79,26 +83,28 @@ public class RPCUtils {
 
 	public static byte[] marshallInteger(byte rpcid, int x) {
 
-		byte[] encoded;
-
 		// TODO: marshall RPC identifier and string into byte array
 
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
+		byte[] encoded = new byte[5];
+
+		ByteBuffer bb = ByteBuffer.allocate(4);
+		bb.putInt(x);
+		byte[] intByte = bb.array();
+
+		for (int i = 0; i < 4; i++) {
+			encoded[i+1] = intByte[i];
 		}
+
+		encoded[0] = rpcid;
 
 		return encoded;
 	}
 
 	public static int unmarshallInteger(byte[] data) {
 
-		int decoded;
-
 		// TODO: unmarshall integer contained in data
+		int decoded = ByteBuffer.wrap(data, 1, 4).getInt();
 
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
-		}
 
 		return decoded;
 

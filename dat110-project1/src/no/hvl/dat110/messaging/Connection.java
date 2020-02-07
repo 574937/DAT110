@@ -9,8 +9,9 @@ import no.hvl.dat110.TODO;
 
 public class Connection {
 
-	private DataOutputStream outStream; // for writing bytes to the underlying TCP connection
-	private DataInputStream inStream; // for reading bytes from the underlying TCP connection
+
+	private DataOutputStream outStream; // for writing bytes to the TCP connection
+	private DataInputStream inStream; // for reading bytes from the TCP connection
 	private Socket socket; // socket for the underlying TCP connection
 
 	public Connection(Socket socket) {
@@ -34,24 +35,29 @@ public class Connection {
 
 		// TODO
 		// encapsulate the data contained in the message and write to the output stream
-		// Hint: use the encapsulate method on the message
-		throw new UnsupportedOperationException(TODO.method());
+		try {
+			outStream.write(message.encapsulate());
+		} catch (Exception e) {
+			System.out.println("Error occurred: " + e);
+		}
 
 	}
 
+
 	public Message receive() {
 
-		Message message;
-		byte[] recvbuf;
-
-		// TODO
-		// read a segment (128 bytes) from the input stream and decapsulate into message
-		// Hint: create a new Message object and use the decapsulate method
+		Message message = new Message();
+		byte[] recvbuf = new byte [MessageConfig.SEGMENTSIZE]; 
 		
-		if (true) {
-			throw new RuntimeException("not yet implemented");
+		
+		// TODO
+		// read a segment from the input stream and decapsulate into message
+		try {
+			inStream.read(recvbuf);
+			message.decapsulate(recvbuf);
+		} catch (IOException e) {
+			System.out.println(e);
 		}
-
 		return message;
 
 	}
@@ -63,12 +69,9 @@ public class Connection {
 
 			outStream.close();
 			inStream.close();
-
 			socket.close();
 		} catch (IOException ex) {
-
 			System.out.println("Connection: " + ex.getMessage());
 			ex.printStackTrace();
 		}
-	}
-}
+	}}
