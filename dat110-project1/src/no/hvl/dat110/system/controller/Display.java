@@ -10,7 +10,7 @@ public class Display extends RPCStub {
 	public void write(String message) {
 
 		// TODO
-		// implement marshalling, call and unmarshalling for write RPC method
+		// implement marshalling,call and unmarshalling for write RPC method
 
 
 		byte[] request = RPCUtils.marshallString(RPCID, message);
